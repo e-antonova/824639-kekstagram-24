@@ -1,7 +1,7 @@
 // Пользовалась источником https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomPositiveIntInclusive(min, max) {
   if (max < min) {
-    const tmp = min;
+    const tmp = max;
     max = min;
     min = tmp;
   }
@@ -18,10 +18,10 @@ function getRandomPositiveIntInclusive(min, max) {
     return min;
   }
 
-  min = Math.ceil(min);
-  max = Math.floor(max);
+  const minValue = Math.ceil(min);
+  const maxValue = Math.floor(max);
 
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
 }
 
 getRandomPositiveIntInclusive(1, 12);

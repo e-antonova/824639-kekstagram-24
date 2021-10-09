@@ -12,13 +12,13 @@ function checkCommentLength(comment, maxLength) {
 
 checkCommentLength('string', 10);
 
-const DESCRIPTIONS = [
+const descriptions = [
   'Эта фотография – мой шедевр',
   'Записываемся на фотосессию',
   'Сразу видно руку мастера',
 ];
 
-const MESSAGES = [
+const messages = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -27,7 +27,7 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-const NAMES = [
+const names = [
   'Антон',
   'Мария',
   'Виктор',
@@ -36,46 +36,41 @@ const NAMES = [
   'Яна',
 ];
 
-const createUserPhotoDescription = () => {
-  let idOfPhoto = 0;
-  let urlIndex = 0;
-  let avatarIndex = 0;
-  const uniqueIdOfComment = [];
+const uniqueCommentIds = [];
+const photosQuantity = 25;
+let idOfPhoto = 0;
+let urlIndex = 0;
 
-  const createUserComment = () => {
-    const randomMessageIndex = getRandomPositiveInteger(0, MESSAGES.length - 1);
-    const randomNameIndex = getRandomPositiveInteger(0, NAMES.length - 1);
+const getRandomMessage = () => messages[getRandomPositiveInteger(0, messages.length - 1)];
 
-    let randomIdOfComment = getRandomPositiveInteger(1, 135);
-    while ((uniqueIdOfComment.includes(randomIdOfComment)) === true) {
-      randomIdOfComment = getRandomPositiveInteger(0, 135);
-    }
-    uniqueIdOfComment.push(randomIdOfComment);
+const getRandomDescription = () => descriptions[getRandomPositiveInteger(0, descriptions.length - 1)];
 
-    return {
-      id: randomIdOfComment,
-      avatar: `img/avatar-${avatarIndex += 1}.svg`,
-      message: `${MESSAGES[randomMessageIndex]  } `,
-      name: `${NAMES[randomNameIndex]  } `,
-    };
-  };
+const getRandomName = () => names[getRandomPositiveInteger(0, names.length - 1)];
 
-  const createPhotoDescriptionObject = () => {
-    const randomDescriptionIndex = getRandomPositiveInteger(0, DESCRIPTIONS.length - 1);
-    const randomLikesNumber = getRandomPositiveInteger(15, 200);
-
-    return {
-      id: idOfPhoto += 1,
-      url: `photos/${urlIndex += 1}.jpg`,
-      description: `${DESCRIPTIONS[randomDescriptionIndex]} `,
-      likes: randomLikesNumber,
-      comments: Array.from({length: 4}, createUserComment),
-    };
-  };
-
-  const createPhotoDescriptionArray = Array.from({length: 25}, createPhotoDescriptionObject);
-
-  return createPhotoDescriptionArray;
+const generateUniqueCommentId = () => {
+  let randomCommentId = getRandomPositiveInteger(1, Number.MAX_SAFE_INTEGER);
+  while (uniqueCommentIds.includes(randomCommentId)) {
+    randomCommentId = getRandomPositiveInteger(1, Number.MAX_SAFE_INTEGER);
+  }
+  uniqueCommentIds.push(randomCommentId);
+  return randomCommentId;
 };
 
-createUserPhotoDescription();
+const createUserComment = () => ({
+  id: generateUniqueCommentId(),
+  avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
+  message: getRandomMessage(),
+  name: getRandomName(),
+});
+
+const createPhotoDescription = () => ({
+  id: idOfPhoto += 1,
+  url: `photos/${urlIndex += 1}.jpg`,
+  description: getRandomDescription(),
+  likes: getRandomPositiveInteger(15, 200),
+  comments: Array.from({length: getRandomPositiveInteger(1, 10)}, createUserComment),
+});
+
+const createUserPhotos = (numberOfPhotos) => Array.from({length: numberOfPhotos}, createPhotoDescription);
+
+createUserPhotos(photosQuantity);

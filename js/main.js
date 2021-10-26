@@ -1,3 +1,3 @@
-import {createUserPhotos, photosQuantity} from './data.js';
+import {renderThumbnails} from './render-thumbnails.js';
 
-createUserPhotos(photosQuantity);
+renderThumbnails();

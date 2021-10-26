@@ -26,8 +26,7 @@ const names = [
 ];
 
 const uniqueCommentIds = [];
-const photosQuantity = 25;
-let idOfPhoto = 0;
+let photoId = 0;
 let urlIndex = 0;
 
 const getRandomMessage = () => messages[getRandomPositiveInteger(0, messages.length - 1)];
@@ -53,7 +52,7 @@ const createUserComment = () => ({
 });
 
 const createPhotoDescription = () => ({
-  id: idOfPhoto += 1,
+  id: photoId += 1,
   url: `photos/${urlIndex += 1}.jpg`,
   description: getRandomDescription(),
   likes: getRandomPositiveInteger(15, 200),
@@ -62,4 +61,4 @@ const createPhotoDescription = () => ({
 
 const createUserPhotos = (numberOfPhotos) => Array.from({length: numberOfPhotos}, createPhotoDescription);
 
-export {createUserPhotos, photosQuantity};
+export {createUserPhotos};

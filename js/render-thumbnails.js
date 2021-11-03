@@ -25,8 +25,8 @@ const renderThumbnails = () => {
 
     fragment.appendChild(pictureItem);
 
-    pictureItem.addEventListener('click', (event) => {
-      openBigPicture(event, photo);
+    pictureItem.addEventListener('click', (evt) => {
+      openBigPicture(evt, photo);
     });
   });
 

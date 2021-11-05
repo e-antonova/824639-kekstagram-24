@@ -11,4 +11,6 @@ function checkCommentLength(comment, maxLength) {
   return comment.length <= maxLength;
 }
 
-export {getRandomPositiveInteger, checkCommentLength};
+const isEscapePressed = (evt) => evt.key === 'Escape';
+
+export {getRandomPositiveInteger, checkCommentLength, isEscapePressed};

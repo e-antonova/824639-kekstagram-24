@@ -1,5 +1,6 @@
 // Модуль, который отвечает за отрисовку миниатюр
 import {createUserPhotos} from './data.js';
+import {openBigPicture} from './render-big-pictures.js';
 
 const PHOTOS_QUANTITY = 25;
 const photos = createUserPhotos(PHOTOS_QUANTITY);
@@ -23,6 +24,10 @@ const renderThumbnails = () => {
     pictureComments.textContent = photo.comments.length;
 
     fragment.appendChild(pictureItem);
+
+    pictureItem.addEventListener('click', (evt) => {
+      openBigPicture(evt, photo);
+    });
   });
 
   picturesContainer.appendChild(fragment);

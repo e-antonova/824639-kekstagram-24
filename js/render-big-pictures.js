@@ -13,6 +13,7 @@ const bigPictureDescription = bigPicture.querySelector('.social__caption');
 const bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
 
 const renderBigPicture = (picture) => {
+  clearComments();
   bigPicture.classList.remove('hidden');
   socialCommentsCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
@@ -32,14 +33,13 @@ const closeBigPicture = () => {
   clearComments();
 
   bigPictureCloseButton.removeEventListener('click', closeBigPicture);
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapePressed(evt)) {
     evt.preventDefault();
     closeBigPicture();
-
-    document.removeEventListener('keydown', onPopupEscKeydown);
   }
 };
 
@@ -49,7 +49,9 @@ const openBigPicture = (evt, picture) => {
 
   document.addEventListener('keydown', onPopupEscKeydown);
 
-  bigPictureCloseButton.addEventListener('click', closeBigPicture);
+  bigPictureCloseButton.addEventListener('click', () => {
+    closeBigPicture();
+  });
 };
 
 export {openBigPicture};

@@ -33,6 +33,7 @@ const closeBigPicture = () => {
   clearComments();
 
   bigPictureCloseButton.removeEventListener('click', closeBigPicture);
+  // eslint-disable-next-line no-use-before-define
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
 

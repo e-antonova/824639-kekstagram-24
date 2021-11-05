@@ -32,9 +32,14 @@ const closeBigPicture = () => {
   body.classList.remove('modal-open');
   clearComments();
 
-  bigPictureCloseButton.removeEventListener('click', closeBigPicture);
+  // eslint-disable-next-line no-use-before-define
+  bigPictureCloseButton.removeEventListener('click', onBigPictureCloseButtonClick);
   // eslint-disable-next-line no-use-before-define
   document.removeEventListener('keydown', onPopupEscKeydown);
+};
+
+const onBigPictureCloseButtonClick = () => {
+  closeBigPicture();
 };
 
 const onPopupEscKeydown = (evt) => {
@@ -50,9 +55,7 @@ const openBigPicture = (evt, picture) => {
 
   document.addEventListener('keydown', onPopupEscKeydown);
 
-  bigPictureCloseButton.addEventListener('click', () => {
-    closeBigPicture();
-  });
+  bigPictureCloseButton.addEventListener('click', onBigPictureCloseButtonClick);
 };
 
 export {openBigPicture};

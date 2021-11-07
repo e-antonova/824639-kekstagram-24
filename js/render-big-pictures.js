@@ -58,4 +58,4 @@ const openBigPicture = (evt, picture) => {
   bigPictureCloseButton.addEventListener('click', onBigPictureCloseButtonClick);
 };
 
-export {openBigPicture};
+export {body, openBigPicture};

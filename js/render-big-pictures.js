@@ -27,27 +27,25 @@ const renderBigPicture = (picture) => {
   picture.comments.forEach(getComments);
 };
 
-const closeBigPicture = () => {
-  bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
-  clearComments();
-
-  // eslint-disable-next-line no-use-before-define
-  bigPictureCloseButton.removeEventListener('click', onBigPictureCloseButtonClick);
-  // eslint-disable-next-line no-use-before-define
-  document.removeEventListener('keydown', onPopupEscKeydown);
-};
-
-const onBigPictureCloseButtonClick = () => {
-  closeBigPicture();
-};
-
 const onPopupEscKeydown = (evt) => {
   if (isEscapePressed(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 };
+
+const onBigPictureCloseButtonClick = () => {
+  closeBigPicture();
+};
+
+function closeBigPicture() {
+  bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
+  clearComments();
+
+  bigPictureCloseButton.removeEventListener('click', onBigPictureCloseButtonClick);
+  document.removeEventListener('keydown', onPopupEscKeydown);
+}
 
 const openBigPicture = (evt, picture) => {
   evt.preventDefault();
@@ -58,4 +56,4 @@ const openBigPicture = (evt, picture) => {
   bigPictureCloseButton.addEventListener('click', onBigPictureCloseButtonClick);
 };
 
-export {openBigPicture};
+export {body, openBigPicture};

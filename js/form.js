@@ -1,6 +1,7 @@
 // Модуль, который отвечает за за работу с формой
 import {body} from './render-big-pictures.js';
 import {isEscapePressed, checkCommentLength} from './util.js';
+import {effectLevelFieldset, changeImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
 const MIN_HASHTAG_LENGTH = 2;
@@ -15,6 +16,7 @@ const editImgForm = imgUploadForm.querySelector('.img-upload__overlay');
 const uploadImgCancelButton = imgUploadForm.querySelector('#upload-cancel');
 const hashtagInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
+const effectsList = document.querySelector('.effects__list');
 
 const onFormEscKeydown = (evt) => {
   if (isEscapePressed(evt)) {
@@ -38,8 +40,13 @@ const onUploadImgCancelButtonClick = () => {
 const onEditImgFormOpen = () => {
   editImgForm.classList.remove('hidden');
   body.classList.add('modal-open');
+  effectLevelFieldset.style.display = 'none';
+
+  changeImageScale();
+  unsetEffect();
 
   uploadImgCancelButton.addEventListener('click', onUploadImgCancelButtonClick);
+  effectsList.addEventListener('change', onEffectsChange);
   onAddKeyDown();
 };
 
@@ -51,6 +58,7 @@ function closeEditImgForm() {
   uploadFileInput.value = '';
 
   uploadImgCancelButton.removeEventListener('click', onUploadImgCancelButtonClick);
+  effectsList.removeEventListener('change', onEffectsChange);
   onRemoveKeyDown();
 }
 

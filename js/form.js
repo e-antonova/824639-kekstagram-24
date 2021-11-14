@@ -2,6 +2,8 @@
 import {body} from './render-big-pictures.js';
 import {isEscapePressed, checkCommentLength} from './util.js';
 import {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
+import {SERVER_URL, sendServerData} from './api.js';
+import {openErrorMessage, openSuccessMessage, showLoadingMessage, removeLoadingMessage} from './info-messages.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
 const MIN_HASHTAG_LENGTH = 2;
@@ -50,6 +52,7 @@ function closeEditImgForm() {
   editImgForm.classList.add('hidden');
   body.classList.remove('modal-open');
   uploadFileInput.value = '';
+  imgUploadForm.reset();
 
   scaleControl.removeEventListener('click', onScaleControlClick);
   uploadImgCancelButton.removeEventListener('click', onUploadImgCancelButtonClick);
@@ -61,7 +64,7 @@ const getHashtagInLowerCase = (elements) => elements.map((element) => element.to
 
 const checkIfDuplicateExists = (tags) => new Set(getHashtagInLowerCase(tags)).size !== getHashtagInLowerCase(tags).length;
 
-const onValidateHashtagInput = () => {
+const onHashtagInputValidate = () => {
   hashtagInput.setCustomValidity('');
 
   if (hashtagInput.value !== '') {
@@ -91,7 +94,7 @@ const onValidateHashtagInput = () => {
   hashtagInput.reportValidity();
 };
 
-hashtagInput.addEventListener('input', onValidateHashtagInput);
+hashtagInput.addEventListener('input', onHashtagInputValidate);
 
 hashtagInput.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
@@ -117,4 +120,19 @@ commentInput.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
 
-export {openForm};
+const onFormSubmit = () => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    showLoadingMessage();
+    sendServerData(
+      SERVER_URL,
+      () => openSuccessMessage(),
+      () => openErrorMessage(),
+      () => removeLoadingMessage(),
+      new FormData(evt.target),
+    );
+    imgUploadForm.reset();
+  });
+};
+
+export {openForm, onFormSubmit};

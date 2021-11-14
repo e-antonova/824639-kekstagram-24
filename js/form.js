@@ -1,6 +1,7 @@
 // Модуль, который отвечает за за работу с формой
 import {body} from './render-big-pictures.js';
 import {isEscapePressed, checkCommentLength} from './util.js';
+import {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
 const MIN_HASHTAG_LENGTH = 2;
@@ -15,20 +16,13 @@ const editImgForm = imgUploadForm.querySelector('.img-upload__overlay');
 const uploadImgCancelButton = imgUploadForm.querySelector('#upload-cancel');
 const hashtagInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
+const effectsList = document.querySelector('.effects__list');
 
 const onFormEscKeydown = (evt) => {
   if (isEscapePressed(evt)) {
     evt.preventDefault();
     closeEditImgForm();
   }
-};
-
-const onRemoveKeyDown = () => {
-  document.removeEventListener('keydown', onFormEscKeydown);
-};
-
-const  onAddKeyDown = () => {
-  document.addEventListener('keydown', onFormEscKeydown);
 };
 
 const onUploadImgCancelButtonClick = () => {
@@ -39,19 +33,28 @@ const onEditImgFormOpen = () => {
   editImgForm.classList.remove('hidden');
   body.classList.add('modal-open');
 
+  resetImageScale();
+  unsetEffect();
+
+  scaleControl.addEventListener('click', onScaleControlClick);
   uploadImgCancelButton.addEventListener('click', onUploadImgCancelButtonClick);
-  onAddKeyDown();
+  effectsList.addEventListener('change', onEffectsChange);
+  document.addEventListener('keydown', onFormEscKeydown);
 };
 
-uploadFileInput.addEventListener('change', onEditImgFormOpen);
+const openForm = () => {
+  uploadFileInput.addEventListener('change', onEditImgFormOpen);
+};
 
 function closeEditImgForm() {
   editImgForm.classList.add('hidden');
   body.classList.remove('modal-open');
   uploadFileInput.value = '';
 
+  scaleControl.removeEventListener('click', onScaleControlClick);
   uploadImgCancelButton.removeEventListener('click', onUploadImgCancelButtonClick);
-  onRemoveKeyDown();
+  effectsList.removeEventListener('change', onEffectsChange);
+  document.removeEventListener('keydown', onFormEscKeydown);
 }
 
 const getHashtagInLowerCase = (elements) => elements.map((element) => element.toLowerCase());
@@ -113,3 +116,5 @@ commentInput.addEventListener('input', onValidateCommentInput);
 commentInput.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
+
+export {openForm};

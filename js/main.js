@@ -1,4 +1,5 @@
 import {renderThumbnails} from './render-thumbnails.js';
-import './form.js';
+import {openForm} from './form.js';
 
 renderThumbnails();
+openForm();

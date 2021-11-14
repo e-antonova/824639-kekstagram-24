@@ -1,7 +1,7 @@
 // Модуль, который отвечает за за работу с формой
 import {body} from './render-big-pictures.js';
 import {isEscapePressed, checkCommentLength} from './util.js';
-import {effectLevelFieldset, changeImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
+import {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
 const MIN_HASHTAG_LENGTH = 2;
@@ -25,14 +25,6 @@ const onFormEscKeydown = (evt) => {
   }
 };
 
-const onRemoveKeyDown = () => {
-  document.removeEventListener('keydown', onFormEscKeydown);
-};
-
-const  onAddKeyDown = () => {
-  document.addEventListener('keydown', onFormEscKeydown);
-};
-
 const onUploadImgCancelButtonClick = () => {
   closeEditImgForm();
 };
@@ -40,26 +32,29 @@ const onUploadImgCancelButtonClick = () => {
 const onEditImgFormOpen = () => {
   editImgForm.classList.remove('hidden');
   body.classList.add('modal-open');
-  effectLevelFieldset.style.display = 'none';
 
-  changeImageScale();
+  resetImageScale();
   unsetEffect();
 
+  scaleControl.addEventListener('click', onScaleControlClick);
   uploadImgCancelButton.addEventListener('click', onUploadImgCancelButtonClick);
   effectsList.addEventListener('change', onEffectsChange);
-  onAddKeyDown();
+  document.addEventListener('keydown', onFormEscKeydown);
 };
 
-uploadFileInput.addEventListener('change', onEditImgFormOpen);
+const openForm = () => {
+  uploadFileInput.addEventListener('change', onEditImgFormOpen);
+};
 
 function closeEditImgForm() {
   editImgForm.classList.add('hidden');
   body.classList.remove('modal-open');
   uploadFileInput.value = '';
 
+  scaleControl.removeEventListener('click', onScaleControlClick);
   uploadImgCancelButton.removeEventListener('click', onUploadImgCancelButtonClick);
   effectsList.removeEventListener('change', onEffectsChange);
-  onRemoveKeyDown();
+  document.removeEventListener('keydown', onFormEscKeydown);
 }
 
 const getHashtagInLowerCase = (elements) => elements.map((element) => element.toLowerCase());
@@ -121,3 +116,5 @@ commentInput.addEventListener('input', onValidateCommentInput);
 commentInput.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
+
+export {openForm};

@@ -83,32 +83,34 @@ const effectLevelFieldset = document.querySelector('.img-upload__effect-level');
 const effectLevelValue = document.querySelector('.effect-level__value');
 
 // Редактирование масштаба изображения
+const changeScale = (multiplier) => {
+  scaleHiddenInput.value = Number(scaleHiddenInput.value) + multiplier * (MIN_SCALE_VALUE / MAX_SCALE_VALUE);
+  scaleControlValue.value = `${parseInt(scaleControlValue.value, 10) + multiplier * SCALE_STEP}%`;
+  imgUploadPreview.style.transform = `scale(${scaleHiddenInput.value})`;
+};
+
 const increaseScale = () => {
   if (scaleHiddenInput.value !== '1') {
-    scaleHiddenInput.value = `${Number(scaleHiddenInput.value) + (MIN_SCALE_VALUE / MAX_SCALE_VALUE)}`;
-    scaleControlValue.value = `${parseInt(scaleControlValue.value, 10) + SCALE_STEP}%`;
-    imgUploadPreview.style.transform = `scale(${scaleHiddenInput.value})`;
+    changeScale(1);
   }
 };
 
 const decreaseScale = () => {
   if (scaleHiddenInput.value !== '0.25') {
-    scaleHiddenInput.value = `${Number(scaleHiddenInput.value) - (MIN_SCALE_VALUE / MAX_SCALE_VALUE)}`;
-    scaleControlValue.value = `${parseInt(scaleControlValue.value, 10) - SCALE_STEP}%`;
-    imgUploadPreview.style.transform = `scale(${scaleHiddenInput.value})`;
+    changeScale(-1);
   }
 };
 
-scaleControl.addEventListener('click', (evt) => {
+const onScaleControlClick = (evt) => {
   if (evt.target === scaleControlBigger) {
     increaseScale();
   }
   if (evt.target === scaleControlSmaller) {
     decreaseScale();
   }
-});
+};
 
-const changeImageScale = () => {
+const resetImageScale = () => {
   scaleControlValue.value = '100%';
   scaleHiddenInput.value = '1';
   imgUploadPreview.style.transform = `scale(${scaleHiddenInput.value})`;
@@ -144,31 +146,9 @@ noUiSlider.create(effectLevelSlider, {
   },
 });
 
-const onEffectsChange = (evt) => {
-  if (evt.target.matches('input[type="radio"]')) {
-    imgUploadPreview.className = '';
-    imgUploadPreview.classList.add(`effects__preview--${evt.target.value}`);
-    if (evt.target.value === 'none') {
-      imgUploadPreview.style.filter = 'none';
-      effectLevelValue.value = 'none';
-      effectLevelFieldset.style.display = 'none';
-    } else if (evt.target.value === 'chrome') {
-      effectLevelFieldset.style.display = 'block';
-      setEffect(FILTERS_CONFIG.chrome);
-    } else if (evt.target.value === 'sepia') {
-      effectLevelFieldset.style.display = 'block';
-      setEffect(FILTERS_CONFIG.sepia);
-    } else if (evt.target.value === 'marvin') {
-      effectLevelFieldset.style.display = 'block';
-      setEffect(FILTERS_CONFIG.marvin);
-    } else if (evt.target.value === 'phobos') {
-      effectLevelFieldset.style.display = 'block';
-      setEffect(FILTERS_CONFIG.phobos);
-    } else if (evt.target.value === 'heat') {
-      effectLevelFieldset.style.display = 'block';
-      setEffect(FILTERS_CONFIG.heat);
-    }
-  }
+const changeEffect = (value) => {
+  effectLevelFieldset.style.display = 'block';
+  setEffect(FILTERS_CONFIG[value]);
 };
 
 const unsetEffect = () => {
@@ -176,6 +156,19 @@ const unsetEffect = () => {
   imgUploadPreview.style.filter = 'none';
   effectLevelValue.value = 'none';
   imgUploadPreview.classList.add('effects__preview--none');
+  effectLevelFieldset.style.display = 'none';
 };
 
-export {effectLevelFieldset, changeImageScale, onEffectsChange, unsetEffect};
+const onEffectsChange = (evt) => {
+  if (evt.target.matches('input[type="radio"]')) {
+    imgUploadPreview.className = '';
+    imgUploadPreview.classList.add(`effects__preview--${evt.target.value}`);
+    if (evt.target.value === 'none') {
+      unsetEffect();
+    } else {
+      changeEffect(evt.target.value);
+    }
+  }
+};
+
+export {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect};

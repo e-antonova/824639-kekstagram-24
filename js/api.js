@@ -40,4 +40,4 @@ const sendServerData = (onSuccess, messageOnSuccess, messageOnFail, body) => {
     });
 };
 
-export {SERVER_URL, getServerData, sendServerData};
+export {getServerData, sendServerData};

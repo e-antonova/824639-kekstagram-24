@@ -1,5 +1,7 @@
 import {renderThumbnails} from './render-thumbnails.js';
-import {openForm} from './form.js';
+import {activateFileLoader} from './form.js';
+import {getServerData} from './api.js';
+import {showServerErrorMessage} from './info-messages.js';
 
-renderThumbnails();
-openForm();
+activateFileLoader();
+getServerData(renderThumbnails, showServerErrorMessage);

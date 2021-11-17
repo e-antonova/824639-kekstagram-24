@@ -13,7 +13,7 @@ const generateUniquePicturesGroup = (pictures, quantity) => {
   while (count < quantity) {
     let randomPicture = pictures[getRandomPositiveInteger(1, pictures.length - 1)];
 
-    while (uniquePictures.filter((pic) => pic.id === randomPicture.id).length > 0) {
+    while (uniquePictures.some((pic) => pic.id === randomPicture.id)) {
       randomPicture = pictures[getRandomPositiveInteger(1, pictures.length - 1)];
     }
     uniquePictures.push(randomPicture);

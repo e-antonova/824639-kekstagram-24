@@ -1,6 +1,10 @@
 import {isEscapePressed} from './util.js';
 import {closeEditImgForm} from './form.js';
 
+const SUCCESS_MESSAGE_BACKGROUND = 'rgb(177, 255, 154, 0.5)';
+const ERROR_MESSAGE_BACKGROUND = 'rgb(227, 66, 52, 0.5)';
+const MESSAGES_ZINDEX = 10;
+
 const alertMessageContainer = document.createElement('div');
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -38,8 +42,8 @@ function closeMessageSuccess () {
 
 const openSuccessMessage = () => {
   document.body.append(successMessageContainer);
-  successMessageContainer.style.zIndex = 10;
-  successMessageTemplateInner.style.backgroundColor = 'rgb(177, 255, 154, 0.5)';
+  successMessageContainer.style.zIndex = MESSAGES_ZINDEX;
+  successMessageTemplateInner.style.backgroundColor = SUCCESS_MESSAGE_BACKGROUND;
 
   successCloseButton.addEventListener('click', onSuccessCloseButtonClick);
   document.addEventListener('keydown', onSuccessMessageEscKeydown);
@@ -59,8 +63,8 @@ const onErrorCloseButtonClick = () => {
 
 const openErrorMessage = () => {
   document.body.append(errorMessageContainer);
-  errorMessageContainer.style.zIndex = 10;
-  errorMessageTemplateInner.style.backgroundColor = 'rgb(227, 66, 52, 0.5)';
+  errorMessageContainer.style.zIndex = MESSAGES_ZINDEX;
+  errorMessageTemplateInner.style.backgroundColor = ERROR_MESSAGE_BACKGROUND;
 
   errorCloseButton.addEventListener('click', onErrorCloseButtonClick);
   document.addEventListener('keydown', onErrorMessageEscKeydown);

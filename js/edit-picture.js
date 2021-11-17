@@ -2,6 +2,9 @@
 const SCALE_STEP = 25;
 const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
+const MAX_SCALE_RATIO = 1;
+const MIN_SCALE_RATIO = 0.25;
+const MAX_SCALE_RATIO_PERCENT = '100%';
 
 const FILTERS_CONFIG = {
   chrome: {
@@ -90,13 +93,13 @@ const changeScale = (multiplier) => {
 };
 
 const increaseScale = () => {
-  if (scaleHiddenInput.value !== '1') {
+  if (scaleHiddenInput.value !== MAX_SCALE_RATIO) {
     changeScale(1);
   }
 };
 
 const decreaseScale = () => {
-  if (scaleHiddenInput.value !== '0.25') {
+  if (scaleHiddenInput.value !== MIN_SCALE_RATIO) {
     changeScale(-1);
   }
 };
@@ -111,8 +114,8 @@ const onScaleControlClick = (evt) => {
 };
 
 const resetImageScale = () => {
-  scaleControlValue.value = '100%';
-  scaleHiddenInput.value = '1';
+  scaleControlValue.value = MAX_SCALE_RATIO_PERCENT;
+  scaleHiddenInput.value = MAX_SCALE_RATIO;
   imgUploadPreview.style.transform = `scale(${scaleHiddenInput.value})`;
 };
 

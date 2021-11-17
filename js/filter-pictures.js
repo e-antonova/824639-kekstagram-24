@@ -8,11 +8,11 @@ const RERENDER_DELAY = 500;
 const filtersSection = document.querySelector('.img-filters');
 const filtersButtons = filtersSection.querySelectorAll('.img-filters__button');
 
-const getRandomPictures = (pictures) => Array.from(generateUniquePicturesGroup(pictures, RANDOM_PICTURES_QUANTITY));
+const getRandomPictures = (pictures) => generateUniquePicturesGroup(pictures, RANDOM_PICTURES_QUANTITY);
 
-const getDefaultPictures = (pictures) => Array.from(pictures.slice());
+const getDefaultPictures = (pictures) => pictures.slice();
 
-const getDiscussedPictures = (pictures) => Array.from(pictures.slice().sort((comment1, comment2) => comment2.comments.length - comment1.comments.length));
+const getDiscussedPictures = (pictures) => pictures.slice().sort((comment1, comment2) => comment2.comments.length - comment1.comments.length);
 
 const removeClass = () => {
   filtersButtons.forEach((button) => {

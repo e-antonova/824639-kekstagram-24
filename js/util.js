@@ -1,16 +1,29 @@
 // модуль с вспомогательными функциями
-function getRandomPositiveInteger (a, b) {
+const getRandomPositiveInteger = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
-}
+};
 
-function checkCommentLength(comment, maxLength) {
-  return comment.length <= maxLength;
-}
+const generateUniquePicturesGroup = (pictures, quantity) => {
+  const uniquePictures = [];
+  let count = 0;
+  while (count < quantity) {
+    let randomPicture = pictures[getRandomPositiveInteger(1, pictures.length - 1)];
+
+    while (uniquePictures.filter((pic) => pic.id === randomPicture.id).length > 0) {
+      randomPicture = pictures[getRandomPositiveInteger(1, pictures.length - 1)];
+    }
+    uniquePictures.push(randomPicture);
+    count++;
+  }
+  return uniquePictures;
+};
+
+const checkCommentLength = (comment, maxLength) => comment.length <= maxLength;
 
 const isEscapePressed = (evt) => evt.key === 'Escape';
 
-export {getRandomPositiveInteger, checkCommentLength, isEscapePressed};
+export {getRandomPositiveInteger, checkCommentLength, isEscapePressed, generateUniquePicturesGroup};

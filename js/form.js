@@ -6,7 +6,6 @@ import {sendServerData} from './api.js';
 import {openErrorMessage, openSuccessMessage} from './info-messages.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
-const MIN_HASHTAG_LENGTH = 2;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS_LENGTH = 5;
 const MAX_COMMENTS_LENGTH = 140;
@@ -31,17 +30,14 @@ const onUploadImgCancelButtonClick = () => {
   closeEditImgForm();
 };
 
-const onFormSubmit = () => {
-  imgUploadForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    sendServerData(
-      () => closeEditImgForm(),
-      () => openSuccessMessage(),
-      () => openErrorMessage(),
-      new FormData(evt.target),
-    );
-    imgUploadForm.reset();
-  });
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  sendServerData(
+    () => closeEditImgForm(),
+    () => openSuccessMessage(),
+    () => openErrorMessage(),
+    new FormData(evt.target),
+  );
 };
 
 const onEditImgFormOpen = () => {
@@ -50,12 +46,12 @@ const onEditImgFormOpen = () => {
 
   resetImageScale();
   unsetEffect();
-  onFormSubmit();
 
   scaleControl.addEventListener('click', onScaleControlClick);
   uploadImgCancelButton.addEventListener('click', onUploadImgCancelButtonClick);
   effectsList.addEventListener('change', onEffectsChange);
   document.addEventListener('keydown', onFormEscKeydown);
+  imgUploadForm.addEventListener('submit', onFormSubmit);
 };
 
 const activateFileLoader = () => {
@@ -72,6 +68,7 @@ function closeEditImgForm() {
   uploadImgCancelButton.removeEventListener('click', onUploadImgCancelButtonClick);
   effectsList.removeEventListener('change', onEffectsChange);
   document.removeEventListener('keydown', onFormEscKeydown);
+  imgUploadForm.removeEventListener('submit', onFormSubmit);
 }
 
 const getHashtagInLowerCase = (elements) => elements.map((element) => element.toLowerCase());
@@ -84,27 +81,22 @@ const checkHashtagFieldValidation = () => {
   if (hashtagField.value !== '') {
     const hashtags = hashtagField.value.split(' ');
 
-    hashtags.forEach((hashtag) => {
-      if (!hashtag.startsWith(FIRST_SYMBOL_HASHTAG)) {
-        hashtagField.setCustomValidity(`Хэш-тег должен начинаться с символа ${FIRST_SYMBOL_HASHTAG} (решётка)`);
-      } else if (!regExp.test(hashtag)) {
-        hashtagField.setCustomValidity('Хэш-тег может состоять только из букв и чисел');
-      } else if (hashtag === FIRST_SYMBOL_HASHTAG) {
-        hashtagField.setCustomValidity('Хеш-тег не может состоять только из одной решётки');
-      } else if (hashtag.length > MAX_HASHTAG_LENGTH) {
-        hashtagField.setCustomValidity(`Максимальная длина хэш-тега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
-      } else if (hashtag.length < MIN_HASHTAG_LENGTH) {
-        hashtagField.setCustomValidity(`Хештег не может быть короче ${MIN_HASHTAG_LENGTH} символов`);
-      } else if (hashtags.length > MAX_HASHTAGS_LENGTH) {
-        hashtagField.setCustomValidity(`Нельзя указать больше ${MAX_HASHTAGS_LENGTH} хэш-тегов`);
-      } else if (checkIfDuplicateExists(hashtags)) {
-        hashtagField.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
-      } else {
-        hashtagField.setCustomValidity('');
-      }
-    });
+    if(hashtags.some((item) => !item.startsWith(FIRST_SYMBOL_HASHTAG))) {
+      hashtagField.setCustomValidity(`Хэш-тег должен начинаться с символа ${FIRST_SYMBOL_HASHTAG} (решётка)`);
+    } else if (hashtags.some((item) => !regExp.test(item))) {
+      hashtagField.setCustomValidity('Хэш-тег может состоять только из букв и чисел');
+    } else if (hashtags.some((item) => item === FIRST_SYMBOL_HASHTAG)) {
+      hashtagField.setCustomValidity('Хеш-тег не может состоять только из одной решётки');
+    } else if (hashtags.some((item) => item.length > MAX_HASHTAG_LENGTH)) {
+      hashtagField.setCustomValidity(`Максимальная длина хэш-тега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
+    } else if (hashtags.length > MAX_HASHTAGS_LENGTH) {
+      hashtagField.setCustomValidity(`Нельзя указать больше ${MAX_HASHTAGS_LENGTH} хэш-тегов`);
+    } else if (checkIfDuplicateExists(hashtags)) {
+      hashtagField.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
+    } else {
+      hashtagField.setCustomValidity('');
+    }
   }
-
   hashtagField.reportValidity();
 };
 const onHashtagFieldInput = () => {
@@ -137,4 +129,4 @@ commentField.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
 
-export {activateFileLoader, onFormSubmit, closeEditImgForm};
+export {activateFileLoader};

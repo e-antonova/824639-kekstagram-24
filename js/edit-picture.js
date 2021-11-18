@@ -93,13 +93,13 @@ const changeScale = (multiplier) => {
 };
 
 const increaseScale = () => {
-  if (scaleHiddenInput.value !== MAX_SCALE_RATIO) {
+  if (Number(scaleHiddenInput.value) !== MAX_SCALE_RATIO) {
     changeScale(1);
   }
 };
 
 const decreaseScale = () => {
-  if (scaleHiddenInput.value !== MIN_SCALE_RATIO) {
+  if (Number(scaleHiddenInput.value) !== MIN_SCALE_RATIO) {
     changeScale(-1);
   }
 };

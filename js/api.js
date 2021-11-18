@@ -19,7 +19,7 @@ const getServerData = (onSuccess, applyFilters, onError) => {
       applyFilters(pictures);
     })
     .catch((err) => {
-      onError(err);
+      onError(`Не удалось загрузить изображения: ${err}`);
     });
 };
 

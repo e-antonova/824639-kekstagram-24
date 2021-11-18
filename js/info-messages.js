@@ -1,11 +1,11 @@
 import {isEscapePressed} from './util.js';
-import {closeEditImgForm} from './form.js';
 
 const SUCCESS_MESSAGE_BACKGROUND = 'rgb(177, 255, 154, 0.5)';
 const ERROR_MESSAGE_BACKGROUND = 'rgb(227, 66, 52, 0.5)';
 const MESSAGES_ZINDEX = 10;
+const ALERT_SHOW_TIME = 5000;
 
-const alertMessageContainer = document.createElement('div');
+const alertContainer = document.createElement('div');
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessageContainer = successMessageTemplate.cloneNode(true);
@@ -18,9 +18,22 @@ const errorCloseButton = errorMessageContainer.querySelector('.error__button');
 const errorMessageTemplateInner = errorMessageContainer.querySelector('.error__inner');
 
 const showServerErrorMessage = (message) => {
-  alertMessageContainer.textContent = message;
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+  alertContainer.textContent = message;
 
-  document.body.append(alertMessageContainer);
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
 };
 
 const onSuccessMessageEscKeydown = (evt) => {
@@ -58,7 +71,6 @@ const onErrorMessageEscKeydown = (evt) => {
 
 const onErrorCloseButtonClick = () => {
   closeErrorMessage();
-  closeEditImgForm();
 };
 
 const openErrorMessage = () => {

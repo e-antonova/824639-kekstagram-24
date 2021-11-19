@@ -4,6 +4,7 @@ import {isEscapePressed, checkCommentLength} from './util.js';
 import {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect} from './edit-picture.js';
 import {sendServerData} from './api.js';
 import {openErrorMessage, openSuccessMessage} from './info-messages.js';
+import {fileChooser, uploadFile} from './upload-file.js';
 
 const FIRST_SYMBOL_HASHTAG = '#';
 const MAX_HASHTAG_LENGTH = 20;
@@ -58,6 +59,11 @@ const activateFileLoader = () => {
   uploadFileField.addEventListener('change', onEditImgFormOpen);
 };
 
+fileChooser.addEventListener('change', () => {
+  onEditImgFormOpen();
+  uploadFile();
+});
+
 function closeEditImgForm() {
   editImgForm.classList.add('hidden');
   body.classList.remove('modal-open');
@@ -69,6 +75,7 @@ function closeEditImgForm() {
   effectsList.removeEventListener('change', onEffectsChange);
   document.removeEventListener('keydown', onFormEscKeydown);
   imgUploadForm.removeEventListener('submit', onFormSubmit);
+  fileChooser.removeEventListener('change', onEditImgFormOpen);
 }
 
 const getHashtagInLowerCase = (elements) => elements.map((element) => element.toLowerCase());

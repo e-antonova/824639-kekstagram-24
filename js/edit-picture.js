@@ -174,4 +174,4 @@ const onEffectsChange = (evt) => {
   }
 };
 
-export {scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect};
+export {imgUploadPreview, scaleControl, onScaleControlClick, resetImageScale, onEffectsChange, unsetEffect};
